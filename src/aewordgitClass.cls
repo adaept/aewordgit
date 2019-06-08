@@ -31,10 +31,10 @@ Option Compare Text
 ' GitHub:   https://github.com/peterennis/aewordgit
 '=======================================================================
 
-Private Declare Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
+Private Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
 
-Private Const aewordgitVERSION As String = "0.0.0"
-Private Const aewordgitVERSION_DATE As String = "September 3, 2018"
+Private Const aewordgitVERSION As String = "0.0.3"
+Private Const aewordgitVERSION_DATE As String = "June 8, 2019"
 
 Private Type mySetupType
     SourceFolder As String
