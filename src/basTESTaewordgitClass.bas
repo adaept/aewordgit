@@ -5,21 +5,27 @@ Option Private Module
 
 ' Default Usage:
 ' The following folders are used if no custom configuration is provided:
-' aexlgitType.SourceFolder = "C:\ae\adaept.com\aewordgit\src\"
-' Run in immediate window:                  EXPORT_THE_CODE
-' Show debug output in immediate window:    Uncomment aewordgitClassTest varDebug:="varDebug"
+'   aewordgitType.SourceFolder = "C:\adaept\aewordgit\src\"
+' Run in immediate window:
+'   EXPORT_THE_CODE
+' Show debug output in immediate window:
+'   EXPORT_THE_CODE("varDebug")
+' Version is set in aewordgitVERSION As String
+'   aewordgitVERSION is found in Class Modules aewordgitClass
 '
 ' Custom Usage:
 ' Public Const FOLDER_FOR_VBA_PROJECT_FILES = "Z:\The\Source\Folder\srx.MYPROJECT\"
 ' For custom configuration of the output source folder in aewordgitClassTest use:
 ' oDbObjects.SourceFolder = FOLDER_FOR_VBA_PROJECT_FILES
-' Run in immediate window: EXPORT_THE_CODE
 '
 
-Public Function EXPORT_THE_CODE() As Boolean
+Public Function EXPORT_THE_CODE(Optional ByVal varDebug As Variant) As Boolean
     On Error GoTo 0
-    'aewordgitClassTest
-    aewordgitClassTest varDebug:="varDebug"
+    If IsMissing(varDebug) Then
+        aewordgitClassTest
+    Else
+        aewordgitClassTest varDebug:="varDebug"
+    End If
 End Function
 
 Public Function aewordgitClassTest(Optional ByVal varDebug As Variant, _
@@ -33,6 +39,8 @@ Public Function aewordgitClassTest(Optional ByVal varDebug As Variant, _
     Set oXlObjects = New aewordgitClass
 
     Dim bln1 As Boolean
+
+    Debug.Print , "varDebug = " & CStr(varDebug), "in procedure aewordgitClassTest of Module basTESTaewordgitClass"
 
     If Not IsMissing(varSrcFldr) Then oXlObjects.SourceFolder = varSrcFldr      ' THE_SOURCE_FOLDER
     '''If Not IsMissing(varXmlFldr) Then oXlObjects.XMLFolder = varXmlFldr      ' THE_XML_FOLDER
