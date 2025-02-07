@@ -7,15 +7,21 @@ Public Const MODULE_NOT_EMPTY_DUMMY As String = vbNullString
 
 '=============================================================================================================================
 ' Tasks:
-' #010 -
-' #009 -
-' #008 -
+' #015 -
+' #014 -
+' #013 -
+' #012 -
+' #011 -
+' #009 - Add setup info to the docm source file
 ' #006 - Can't execute code in break mode - error after doc saved from template and opened. Use error trapping in ThisDocument
-' #004 - Add an About setion in Ambigram tab to show version and logo
-' #003 - Word 2019 Preview does not show 2016 Ambigram ribbon tab, report bug to Avenius
 '=============================================================================================================================
 '
 '
+' 20240207 - v004
+    ' FIXED - #010 - Error 448 when running EXPORT_THE_CODE, varDebug not passed correctly
+    ' FIXED - #008 - Update to use c:\adaept\aewordgit\src\ as default - repo is now in the github adaept organization
+    ' OBSOLETE - #004 - Add an About setion in Ambigram tab to show version and logo
+    ' OBSOLETE - #003 - Word 2019 Preview does not show 2016 Ambigram ribbon tab, report bug to Avenius
 ' 20190608 - v003
     ' FIXED - #007 - Compile error for x64, needs PtrSafe
 ' 20180920 - v002

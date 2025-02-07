@@ -10,7 +10,7 @@ Attribute VB_Exposed = False
 Option Explicit
 Option Compare Text
 
-'Copyright (c) 2018 Peter F. Ennis
+'Copyright (c) 2018-2025 Peter F. Ennis
 'This library is free software; you can redistribute it and/or
 'modify it under the terms of the GNU Lesser General Public
 'License as published by the Free Software Foundation;
@@ -33,8 +33,8 @@ Option Compare Text
 
 Private Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
 
-Private Const aewordgitVERSION As String = "0.0.3"
-Private Const aewordgitVERSION_DATE As String = "June 8, 2019"
+Private Const aewordgitVERSION As String = "0.0.4"
+Private Const aewordgitVERSION_DATE As String = "February 7, 2025"
 
 Private Type mySetupType
     SourceFolder As String
@@ -63,7 +63,7 @@ Private Sub Class_Initialize()
     End If
     ' Provide a default value for the SourceFolder and ImportFolder properties
     aewordgitSourceFolder = "default"
-    aewordgitType.SourceFolder = "C:\ae\adaept.com\aewordgit\src\"
+    aewordgitType.SourceFolder = "C:\adaept\aewordgit\src\"
 
     Debug.Print "Class_Initialize"
     Debug.Print , "Default for aewordgitSourceFolder = " & aewordgitSourceFolder
