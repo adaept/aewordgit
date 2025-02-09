@@ -33,8 +33,8 @@ Option Compare Text
 
 Private Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
 
-Private Const aewordgitVERSION As String = "0.0.4"
-Private Const aewordgitVERSION_DATE As String = "February 7, 2025"
+Private Const aewordgitVERSION As String = "0.0.5"
+Private Const aewordgitVERSION_DATE As String = "February 9, 2025"
 
 Private Type mySetupType
     SourceFolder As String
@@ -151,12 +151,25 @@ Private Function aeDocumentTheWordCode(Optional ByVal varDebug As Variant) As Bo
         Debug.Print , "varDebug IS NOT missing so blnDebug of aeDocumentTheWordCode is set to True"
         Debug.Print , "NOW DEBUGGING..."
     End If
-
-    MsgBox "Files will be deleted from" & vbCrLf & _
-        FolderWithVBAProjectFiles & "*.*", vbInformation, "aeDocumentTheWordCode"
-    On Error Resume Next
-    Kill FolderWithVBAProjectFiles & "*.*"
-    On Error GoTo PROC_ERR
+    
+    Dim response As VbMsgBoxResult
+    
+    ' Display the message box with "Yes" and "No" buttons
+    response = MsgBox("Files will be deleted from" & vbCrLf & _
+        FolderWithVBAProjectFiles & "*.*", vbYesNo + vbQuestion, "aeDocumentTheWordCode")
+    ' Handle the user's response
+    Select Case response
+        Case vbYes
+            'MsgBox "You chose Yes.", vbInformation, "Response"
+            ' Add your code here for when the user selects Yes
+            On Error Resume Next
+            Kill FolderWithVBAProjectFiles & "*.*"
+            On Error GoTo PROC_ERR
+        Case vbNo
+            'MsgBox "You chose No.", vbInformation, "Response"
+            ' Add your code here for when the user selects No
+            Exit Function
+    End Select
 
     RunExportCode FolderWithVBAProjectFiles
 
