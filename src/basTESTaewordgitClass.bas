@@ -35,15 +35,17 @@ Public Function aewordgitClassTest(Optional ByVal varDebug As Variant, _
 
     On Error GoTo PROC_ERR
 
-    Dim oXlObjects As aewordgitClass
-    Set oXlObjects = New aewordgitClass
+    Dim oWordObjects As aewordgitClass
+    Set oWordObjects = New aewordgitClass
 
     Dim bln1 As Boolean
 
-    Debug.Print , "varDebug = " & CStr(varDebug), "in procedure aewordgitClassTest of Module basTESTaewordgitClass"
+    If CStr(varDebug) = "Error 448" Then
+        Debug.Print , "varDebug is Not Used"
+    End If
 
-    If Not IsMissing(varSrcFldr) Then oXlObjects.SourceFolder = varSrcFldr      ' THE_SOURCE_FOLDER
-    '''If Not IsMissing(varXmlFldr) Then oXlObjects.XMLFolder = varXmlFldr      ' THE_XML_FOLDER
+    If Not IsMissing(varSrcFldr) Then oWordObjects.SourceFolder = varSrcFldr      ' THE_SOURCE_FOLDER
+    '''If Not IsMissing(varXmlFldr) Then oWordObjects.XMLFolder = varXmlFldr      ' THE_XML_FOLDER
 
 Test1:
     '=============
@@ -56,10 +58,10 @@ Test1:
     If IsMissing(varDebug) Then
         Debug.Print , "varDebug IS missing so no parameter is passed to DocumentTheWordCode"
         Debug.Print , "DEBUGGING IS OFF"
-        bln1 = oXlObjects.DocumentTheWordCode()
+        bln1 = oWordObjects.DocumentTheWordCode()
     Else
         Debug.Print , "varDebug IS NOT missing so blnDebug is set to True"
-        bln1 = oXlObjects.DocumentTheWordCode("WithDebugging")
+        bln1 = oWordObjects.DocumentTheWordCode("WithDebugging")
     End If
     Debug.Print "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
     Debug.Print
