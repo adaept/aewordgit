@@ -10,12 +10,12 @@ Public Const MODULE_NOT_EMPTY_DUMMY As String = vbNullString
 ' #015 -
 ' #014 -
 ' #013 -
-' #012 -
 ' #009 - Add setup info to the docm source file
 ' #006 - Can't execute code in break mode - error after doc saved from template and opened. Use error trapping in ThisDocument
 '=============================================================================================================================
 '
-'
+' 20240210 - v006
+    ' FIXED - #012 - If current folder is not aewordgit then export to src as user default
 ' 20240209 - v005
     ' FIXED - #011 - Add Yes No MessageBox when deleting src *.* files so as to confirm correct setup location
 ' 20240207 - v004

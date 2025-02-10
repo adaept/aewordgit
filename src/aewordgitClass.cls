@@ -33,11 +33,12 @@ Option Compare Text
 
 Private Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal lngMilliSeconds As Long)
 
-Private Const aewordgitVERSION As String = "0.0.5"
-Private Const aewordgitVERSION_DATE As String = "February 9, 2025"
+Private Const aewordgitVERSION As String = "0.0.6"
+Private Const aewordgitVERSION_DATE As String = "February 10, 2025"
 
 Private Type mySetupType
     SourceFolder As String
+    UserSourceFolder As String
     ImportFolder As String
 End Type
 
@@ -49,6 +50,7 @@ Private Const vbext_ct_Document As Long = 100
 
 Private aewordgitType As mySetupType
 Private aewordgitSourceFolder As String
+Private aewordgitUserSourceFolder As String
 
 Private Sub Class_Initialize()
     ' Ref: http://www.cadalyst.com/cad/autocad/programming-with-class-part-1-5050
@@ -58,16 +60,18 @@ Private Sub Class_Initialize()
     On Error GoTo 0
     'MsgBox Application.VBE.ActiveVBProject.Name
     'MsgBox Application.Caption
-    If Application.VBE.ActiveVBProject.Name = "aewordgit" Then
-        Application.Caption = Application.VBE.ActiveVBProject.Name & " " & aewordgitVERSION
+    If Application.VBE.ActiveVBProject.name = "aewordgit" Then
+        Application.Caption = Application.VBE.ActiveVBProject.name & " " & aewordgitVERSION
     End If
     ' Provide a default value for the SourceFolder and ImportFolder properties
     aewordgitSourceFolder = "default"
     aewordgitType.SourceFolder = "C:\adaept\aewordgit\src\"
+    aewordgitType.UserSourceFolder = ActiveDocument.Path & "\src\"
 
     Debug.Print "Class_Initialize"
     Debug.Print , "Default for aewordgitSourceFolder = " & aewordgitSourceFolder
     Debug.Print , "Default for aewordgitType.SourceFolder = " & aewordgitType.SourceFolder
+    Debug.Print , "Default for aewordgitType.UserSourceFolder = " & aewordgitType.UserSourceFolder
 End Sub
 
 Private Sub Class_Terminate()
@@ -122,8 +126,8 @@ Private Function ThisIsAnAddIn(ByVal strAddIn As String, Optional ByVal varDebug
     ThisIsAnAddIn = False
     rw = 1
     For Each varAddIn In Application.AddIns
-        If Not IsMissing(varDebug) Then Debug.Print varAddIn.Name, varAddIn.Installed
-        If varAddIn.Name = strAddIn Then
+        If Not IsMissing(varDebug) Then Debug.Print varAddIn.name, varAddIn.Installed
+        If varAddIn.name = strAddIn Then
             ThisIsAnAddIn = True
             Exit Function
         Else
@@ -194,7 +198,7 @@ Private Sub RunExportCode(ByVal strExportPath As String)
     On Error GoTo PROC_ERR
 
     ' NOTE: The document must be open in Word
-    strDocName = ActiveDocument.Name
+    strDocName = ActiveDocument.name
     Debug.Print , "strDocName = " & strDocName
     'Stop
 
@@ -209,7 +213,7 @@ Private Sub RunExportCode(ByVal strExportPath As String)
 
     For Each objComponent In docSource.VBProject.VBComponents
 
-        strFileName = objComponent.Name
+        strFileName = objComponent.name
         Debug.Print , "strFileName = " & strFileName
 
         ' Concatenate the correct filename for export.
@@ -267,13 +271,13 @@ Private Sub OutputListOfWordProperties(Optional ByVal varDebug As Variant)
 
     ' Ref: http://stackoverflow.com/questions/16642362/how-to-get-the-following-code-to-continue-on-error
     For Each docProp In wdoc.CustomDocumentProperties
-        If Not IsMissing(varDebug) Then Debug.Print , docProp.Name & ": " & docProp.Value
-        Print #fle, docProp.Name & ": " & docProp.Value
+        If Not IsMissing(varDebug) Then Debug.Print , docProp.name & ": " & docProp.Value
+        Print #fle, docProp.name & ": " & docProp.Value
     Next
 
     For Each docProp In ActiveDocument.BuiltInDocumentProperties
-        If Not IsMissing(varDebug) Then Debug.Print , docProp.Name & ": " & docProp.Value
-        Print #fle, docProp.Name & ": " & docProp.Value
+        If Not IsMissing(varDebug) Then Debug.Print , docProp.name & ": " & docProp.Value
+        Print #fle, docProp.name & ": " & docProp.Value
     Next
 
 PROC_EXIT:
@@ -294,10 +298,11 @@ End Sub
 
 Private Function FolderWithVBAProjectFiles() As String
 
-    On Error GoTo 0
+    On Error GoTo PROC_ERR
+    
     Dim WshShell As Object
     Dim FSO As Object
-    Dim SpecialPath As String
+    Dim SpecialPath, fullPath, directoryName As String
 
     Set WshShell = CreateObject("WScript.Shell")
     Set FSO = CreateObject("Scripting.FileSystemObject")
@@ -306,14 +311,19 @@ Private Function FolderWithVBAProjectFiles() As String
 
     'Debug.Print "A. FolderWithVBAProjectFiles", "aewordgitSourceFolder = " & aewordgitSourceFolder
 
-    If aewordgitSourceFolder = "default" Then
+    ' Get the full path of the active document
+    fullPath = ActiveDocument.Path
+    ' Extract the directory name from the full path
+    directoryName = Mid(fullPath, InStrRev(fullPath, "\") + 1)
+
+    If aewordgitSourceFolder = "default" And directoryName = "aewordgit" Then
         FolderWithVBAProjectFiles = aewordgitType.SourceFolder
         'Debug.Print "B. FolderWithVBAProjectFiles", "FolderWithVBAProjectFiles = " & aewordgitType.SourceFolder
-
+    ElseIf aewordgitSourceFolder = "default" And directoryName <> "aewordgit" Then
+        FolderWithVBAProjectFiles = aewordgitType.UserSourceFolder
+        'Debug.Print "C. FolderWithVBAProjectFiles", "FolderWithVBAProjectFiles = " & FolderWithVBAProjectFiles
     ElseIf IsNull(aewordgitSourceFolder) Then
-        If Right$(SpecialPath, 1) <> "\" Then
-            SpecialPath = SpecialPath & "\"
-        End If
+        If Right$(SpecialPath, 1) <> "\" Then SpecialPath = SpecialPath & "\"
 
         If FSO.FolderExists(SpecialPath & "VBAProjectFiles") = False Then
             On Error Resume Next
@@ -339,8 +349,20 @@ Private Function FolderWithVBAProjectFiles() As String
         FolderWithVBAProjectFiles = "Error"
     End If
     
-    'Debug.Print "C. FolderWithVBAProjectFiles", "FolderWithVBAProjectFiles = " & FolderWithVBAProjectFiles
+    'Debug.Print "D. FolderWithVBAProjectFiles", "FolderWithVBAProjectFiles = " & FolderWithVBAProjectFiles
     'Stop
+
+PROC_EXIT:
+    Exit Function
+
+PROC_ERR:
+    If Err = -2147467259 Then     ' Method 'Value' of object ... failed
+        'MsgBox "Erl=" & Erl & " Error " & Err.Number & " (" & Err.Description & ") in function FolderWithVBAProjectFiles of Class aewordgitClass"
+        Resume Next
+    Else
+        MsgBox "Erl=" & Erl & " Error " & Err.Number & " (" & Err.Description & ") in function FolderWithVBAProjectFiles of Class aewordgitClass"
+        Resume PROC_EXIT
+    End If
 
 End Function
 
