@@ -5,7 +5,7 @@ Option Private Module
 
 Public Sub ImportWordGitFiles()
     Call ImportVBAFile("C:\adaept\aewordgit\src\aewordgitClass.cls")
-    'Call ImportVBAFile("C:\adaept\aewordgit\src\basChangeLogaewordgit.bas")
+    Call ImportVBAFile("C:\adaept\aewordgit\src\basChangeLogaewordgit.bas")
     'Call ImportVBAFile("C:\adaept\aewordgit\src\basImportWordGitFiles.bas")
     Call ImportVBAFile("C:\adaept\aewordgit\src\basTESTaewordgitClass.bas")
 End Sub

@@ -6,12 +6,14 @@ Option Private Module
 ' Default Usage:
 ' The following folders are used if no custom configuration is provided:
 '   aewordgitType.SourceFolder = "C:\adaept\aewordgit\src\"
+' OR
+'   aewordgitType.UserSourceFolder = ActiveDocument.Path & "\src\"
 ' Run in immediate window:
 '   EXPORT_THE_CODE
 ' Show debug output in immediate window:
 '   EXPORT_THE_CODE("varDebug")
 ' Version is set in aewordgitVERSION As String
-'   aewordgitVERSION is found in Class Modules aewordgitClass
+'   aewordgitVERSION is found in Class Module aewordgitClass
 '
 ' Custom Usage:
 ' Public Const FOLDER_FOR_VBA_PROJECT_FILES = "Z:\The\Source\Folder\srx.MYPROJECT\"
@@ -80,5 +82,4 @@ PROC_ERR:
     End If
 
 End Function
-
 
